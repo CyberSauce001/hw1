@@ -1,6 +1,6 @@
-//modified by:
-//date:
-//purpose:
+//modified by: Alexander Nguyen
+//date:05/30/2017
+//purpose: To make the particle bounce off the platform
 //
 //cs3350 Spring 2017 Lab-1
 //author: Gordon Griesel
@@ -170,7 +170,7 @@ void init_opengl(void)
 	//Set 2D mode (no perspective)
 	glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
 	//Set the screen background color
-	glClearColor(0.1, 0.1, 0.1, 1.0);
+	glClearColor(1.1, 5.1, 5.1, 1.0);//made the background white
 }
 
 void makeParticle(Game *game, int x, int y)
@@ -183,7 +183,7 @@ void makeParticle(Game *game, int x, int y)
 	p->s.center.x = x;
 	p->s.center.y = y;
 	p->velocity.y = -4.0;
-	p->velocity.x =  1.0;
+	p->velocity.x =  2.0;//increase the speed by +1.0
 	game->n++;
 }
 
@@ -245,10 +245,13 @@ void movement(Game *game)
 	p->s.center.y += p->velocity.y;
 
 	//check for collision with shapes...
-	//Shape *s;
+	Shape *s = &game->box; // make shape = to game->box)
+	if (p->s.center.y < s->center.y + s->height) { // create center and add to height
+	    p->velocity.y = -p->velocity.y; // reverse the philosohy thinking
+	}
 
 	//check for off-screen
-	if (p->s.center.y < 0.0) {
+	if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT) {
 		std::cout << "off screen" << std::endl;
 		game->n = 0;
 	}
@@ -262,7 +265,7 @@ void render(Game *game)
 
 	//draw box
 	Shape *s;
-	glColor3ub(90,140,90);
+	glColor3ub(0,140,90);//change the first value from 90 to 0
 	s = &game->box;
 	glPushMatrix();
 	glTranslatef(s->center.x, s->center.y, s->center.z);
@@ -278,10 +281,10 @@ void render(Game *game)
 
 	//draw all particles here
 	glPushMatrix();
-	glColor3ub(150,160,220);
+	glColor3ub(150,0,220);//change the second value from 160 to 0
 	Vec *c = &game->particle.s.center;
-	w = 2;
-	h = 2;
+	w = 5;//change both w and h from 2 to 5
+	h = 5;
 	glBegin(GL_QUADS);
 		glVertex2i(c->x-w, c->y-h);
 		glVertex2i(c->x-w, c->y+h);
