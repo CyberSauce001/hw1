@@ -182,8 +182,8 @@ void makeParticle(Game *game, int x, int y)
 	Particle *p = &game->particle;
 	p->s.center.x = x;
 	p->s.center.y = y;
-	p->velocity.y = -4.0;
-	p->velocity.x =  2.0;//increase the speed by +1.0
+	p->velocity.y = -3.0;//change from -4.0 to -3.0
+	p->velocity.x =  3.0;//increase the speed by +2.0
 	game->n++;
 }
 
@@ -205,6 +205,8 @@ void check_mouse(XEvent *e, Game *game)
 		}
 		if (e->xbutton.button==3) {
 			//Right button was pressed
+			int x = WINDOW_HEIGHT - e->xbutton.x;
+			makeParticle(game, e->xbutton.y, x);
 			return;
 		}
 	}
@@ -251,7 +253,7 @@ void movement(Game *game)
 	}
 
 	//check for off-screen
-	if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT) {
+	if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT || p->s.center.y > WINDOW_WIDTH) {
 		std::cout << "off screen" << std::endl;
 		game->n = 0;
 	}
