@@ -72,7 +72,7 @@ struct Particle {
 class Game {
 
     public:
-	Shape box;
+	Shape box[5];
 	Particle particle[MAX_PARTICLES];
 	int n;
 	Game() {
@@ -98,12 +98,22 @@ int main(void)
 	init_opengl();
 	//declare game object
 	Game game;
-
 	//declare a box shape
-	game.box.width = 100;
-	game.box.height = 10;
-	game.box.center.x = 120 + 5*65;
-	game.box.center.y = 500 - 5*60;
+	game.box[0].width = 100;
+	game.box[0].height = 10;
+	game.box[0].center.x = 220 + 5*65;//box
+	game.box[0].center.y = 600 - 5*60;
+	game.box[1].width = 100;
+	game.box[1].height = 10;
+	game.box[1].center.x = 320 + 5*65;//box
+	game.box[1].center.y = 700 - 5*60;
+	
+
+	game.box[5].width = 100;
+	game.box[5].height = 10;
+	game.box[5].center.x = 120 + 5*65;//box
+	game.box[5].center.y = 500 - 5*60;
+	
 
 	//start animation
 	while (!done) {
@@ -259,21 +269,24 @@ void movement(Game *game)
 
 
 		//check for collision with shapes...
-		Shape *s = &game->box; // make shape = to game->box)
-		if (p->s.center.y < s->center.y + s->height &&
-		    p->s.center.x > s->center.x - s->width &&
-		    p->s.center.x < s->center.x + s->width ) {
-	            	p->s.center.y = s->center.y + s->height;
-	    		p->velocity.y = -p->velocity.y; 
-			p->velocity.y *= 0.5;
-		}
+		for (int i = 0; i < 5; i++) {
+			Shape *s = &game->box[i]; // make shape = to game->box)
+			if (p->s.center.y < s->center.y + s->height &&
+		    		p->s.center.x > s->center.x - s->width &&
+		    		p->s.center.x < s->center.x + s->width ) {
+	            		p->s.center.y = s->center.y + s->height;
+	    			p->velocity.y = -p->velocity.y; 
+				p->velocity.y *= 0.5;
+			}
 
-		//check for off-screen
-		if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT) {
-			//std::cout << "off screen" << std::endl;
-			game->particle[i] = game->particle[game->n-1];
-			game->n--;
+			//check for off-screen
+			if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT) {
+				//std::cout << "off screen" << std::endl;
+				game->particle[i] = game->particle[game->n-1];
+				game->n--;
+			}
 		}
+		
 	}
 }
 
@@ -285,8 +298,10 @@ void render(Game *game)
 
 	//draw box
 	Shape *s;
-	glColor3ub(0,140,90);//change the first value from 90 to 0
-	s = &game->box;
+	glColor3ub(0,140,90);
+	s = &game->box[0];
+	s = &game->box[1];
+	s = &game->box[5];
 	glPushMatrix();
 	glTranslatef(s->center.x, s->center.y, s->center.z);
 	w = s->width;
