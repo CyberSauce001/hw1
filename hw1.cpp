@@ -283,10 +283,10 @@ void render(Game *game)
 
 	//draw all particles here
 	glPushMatrix();
-	glColor3ub(150,0,220);//change the second value from 160 to 0
+	glColor3ub(150,160,220);
 	Vec *c = &game->particle.s.center;
-	w = 5;//change both w and h from 2 to 5
-	h = 5;
+	w = 2;
+	h = 2;
 	glBegin(GL_QUADS);
 		glVertex2i(c->x-w, c->y-h);
 		glVertex2i(c->x-w, c->y+h);
