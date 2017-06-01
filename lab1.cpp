@@ -99,20 +99,12 @@ int main(void)
 	//declare game object
 	Game game;
 	//declare a box shape
-	game.box[0].width = 100;
-	game.box[0].height = 10;
-	game.box[0].center.x = 220 + 5*65;//box
-	game.box[0].center.y = 600 - 5*60;
-	game.box[1].width = 100;
-	game.box[1].height = 10;
-	game.box[1].center.x = 320 + 5*65;//box
-	game.box[1].center.y = 700 - 5*60;
-	
-
-	game.box[5].width = 100;
-	game.box[5].height = 10;
-	game.box[5].center.x = 120 + 5*65;//box
-	game.box[5].center.y = 500 - 5*60;
+	for (int i = 0; i < 5; i++) {
+		game.box[i].width = 100;
+		game.box[i].height = 10;
+		game.box[i].center.x = 120 + 5*65;//box
+		game.box[i].center.y = 500 - 5*60;
+	}
 	
 
 	//start animation
@@ -215,11 +207,9 @@ void check_mouse(XEvent *e, Game *game)
 		if (e->xbutton.button==1) {
 			//Left button was pressed
 			int y = WINDOW_HEIGHT - e->xbutton.y;
-			makeParticle(game, e->xbutton.x, y);
-			makeParticle(game, e->xbutton.x, y);
-			makeParticle(game, e->xbutton.x, y);
-			makeParticle(game, e->xbutton.x, y);
-			makeParticle(game, e->xbutton.x, y);
+			for (int i = 0; i < 5; i++) {
+				makeParticle(game, e->xbutton.x, y);
+			}
 			return;
 		}
 		if (e->xbutton.button==3) {
@@ -247,9 +237,7 @@ int check_keys(XEvent *e, Game *game)
 		if (key == XK_Escape) {
 			return 1;
 		}
-		//You may check other keys here.
-
-
+		//You may check other keys here
 
 	}
 	return 0;
@@ -267,16 +255,18 @@ void movement(Game *game)
 		p->s.center.x += p->velocity.x;
 		p->s.center.y += p->velocity.y;
 
-
+		Shape *s;
 		//check for collision with shapes...
-		for (int i = 0; i < 5; i++) {
-			Shape *s = &game->box[i]; // make shape = to game->box)
+		for (int x = 0; x < 5; x++) {
+			s = &game->box[x]; // make shape = to game->box)
 			if (p->s.center.y < s->center.y + s->height &&
+				p->s.center.y > s->center.y - s->height &&
 		    		p->s.center.x > s->center.x - s->width &&
 		    		p->s.center.x < s->center.x + s->width ) {
 	            		p->s.center.y = s->center.y + s->height;
 	    			p->velocity.y = -p->velocity.y; 
 				p->velocity.y *= 0.5;
+				p->velocity.x += 0.5;
 			}
 
 			//check for off-screen
@@ -298,22 +288,24 @@ void render(Game *game)
 
 	//draw box
 	Shape *s;
-	glColor3ub(0,140,90);
-	s = &game->box[0];
-	s = &game->box[1];
-	s = &game->box[5];
+	
+	for (int i = 0; i < 5; i++) {
+		glColor3ub(0,140,90);
+		s = &game->box[i];
+	
+
 	glPushMatrix();
 	glTranslatef(s->center.x, s->center.y, s->center.z);
 	w = s->width;
 	h = s->height;
 	glBegin(GL_QUADS);
-		glVertex2i(-w,-h);
-		glVertex2i(-w, h);
-		glVertex2i( w, h);
-		glVertex2i( w,-h);
+	glVertex2i(-w,-h);
+	glVertex2i(-w, h);
+	glVertex2i( w, h);
+	glVertex2i( w,-h);
 	glEnd();
 	glPopMatrix();
-
+	}
 	//draw all particles here
 	for (int i = 0; i < game->n; i++) {
 		glPushMatrix();
@@ -322,10 +314,10 @@ void render(Game *game)
 		w = 2;
 		h = 2;
 		glBegin(GL_QUADS);
-			glVertex2i(c->x-w, c->y-h);
-			glVertex2i(c->x-w, c->y+h);
-			glVertex2i(c->x+w, c->y+h);
-			glVertex2i(c->x+w, c->y-h);
+		glVertex2i(c->x-w, c->y-h);
+		glVertex2i(c->x-w, c->y+h);
+		glVertex2i(c->x+w, c->y+h);
+		glVertex2i(c->x+w, c->y-h);
 		glEnd();
 		glPopMatrix();
 	}
