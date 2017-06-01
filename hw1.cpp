@@ -74,9 +74,10 @@ class Game {
     public:
 	Shape box[5];
 	Particle particle[MAX_PARTICLES];
-	int n;
+	int n, bubbler;
+	int mouse[2];
 	Game() {
-	    n = 0;
+	    n = 0, bubbler = 0;
 	}
 };
 
@@ -221,12 +222,18 @@ void check_mouse(XEvent *e, Game *game)
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
-		if (++n < 10)
-			return;
-		int y = WINDOW_HEIGHT - e->xbutton.y;
-		for (int i = 0; i < 10; i++)
-		    makeParticle(game, e->xbutton.x,y);
+		/*if (++n < 10)
+			return;*/
+	int y = WINDOW_HEIGHT - e->xbutton.y;
+		
+	if (game->bubbler == 0) {
+		game->mouse[0] = savex;
+		game->mouse[1] = y;
 	}
+	for (int i = 0; i < 10; i++) {
+		makeParticle(game, e->xbutton.x,y);
+	}
+   }
 }
 
 int check_keys(XEvent *e, Game *game)
