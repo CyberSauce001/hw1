@@ -102,8 +102,8 @@ int main(void)
 	for (int i = 0; i < 5; i++) {
 		game.box[i].width = 100;
 		game.box[i].height = 10;
-		game.box[i].center.x = 120 + 5*65;//box
-		game.box[i].center.y = 500 - 5*60;
+		game.box[i].center.x = 120 + i*65;//box
+		game.box[i].center.y = 500 - i*60;
 	}
 	
 
