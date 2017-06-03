@@ -1,5 +1,5 @@
 //modified by: Alexander Nguyen
-//date:05/30/2017
+//date:06/03/2017
 //purpose: To make the particle bounce off the platform
 //
 //cs3350 Spring 2017 Lab-1
@@ -44,7 +44,7 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-const int  MAX_PARTICLES = 4000;
+const int  MAX_PARTICLES = 100000;
 #define GRAVITY 0.1
 
 //X Windows variables
@@ -74,10 +74,12 @@ class Game {
     public:
 	Shape box[5];
 	Particle particle[MAX_PARTICLES];
-	int n;
+	int n, bubbler;
+	int mouse[2];
 	Game() {
-	    n = 0;
+	    n = 0, bubbler = 0;
 	}
+	Shape circle; // Water will fall on lower right circle
 };
 
 //Function prototypes
@@ -98,6 +100,7 @@ int main(void)
 	init_opengl();
 	//declare game object
 	Game game;
+	game.n = 0;
 	//declare a box shape
 	for (int i = 0; i < 5; i++) {
 		game.box[i].width = 100;
@@ -106,6 +109,9 @@ int main(void)
 		game.box[i].center.y = 500 - i*60;
 	}
 	
+	game.circle.radius = 100;
+	game.circle.center.x = 200 + 5*65;
+	game.circle.center.y = 200 - 5*60;
 
 	//start animation
 	while (!done) {
@@ -223,9 +229,14 @@ void check_mouse(XEvent *e, Game *game)
 		savey = e->xbutton.y;
 		if (++n < 10)
 			return;
-		int y = WINDOW_HEIGHT - e->xbutton.y;
-		for (int i = 0; i < 10; i++)
-		    makeParticle(game, e->xbutton.x,y);
+	int y = WINDOW_HEIGHT - e->xbutton.y;
+		
+	for (int i = 0; i < 10; i++) {
+		makeParticle(game, e->xbutton.x,y);
+	}
+   	game->mouse[0] = savex;
+	game->mouse[1] =WINDOW_HEIGHT - savey;
+
 	}
 }
 
@@ -238,6 +249,9 @@ int check_keys(XEvent *e, Game *game)
 			return 1;
 		}
 		//You may check other keys here
+		if (key == XK_b) {
+		game->bubbler ^= 1;
+		}
 
 	}
 	return 0;
@@ -246,6 +260,9 @@ int check_keys(XEvent *e, Game *game)
 void movement(Game *game)
 {
 	Particle *p;
+	if (game->bubbler != 0) {
+		makeParticle(game, game->mouse[0], game->mouse[1]);
+	}
 
 	if (game->n <= 0)
 		return;
@@ -264,20 +281,20 @@ void movement(Game *game)
 		    		p->s.center.x > s->center.x - s->width &&
 		    		p->s.center.x < s->center.x + s->width ) {
 	            		p->s.center.y = s->center.y + s->height;
-	    			p->velocity.y = -p->velocity.y; 
-				p->velocity.y *= 0.5;
+	    			p->velocity.y = -p->velocity.y * 0.5; 
+				//p->velocity.y *= 0.5;
 				p->velocity.x += 0.5;
 			}
-
+		}
 			//check for off-screen
-			if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT) {
-				//std::cout << "off screen" << std::endl;
-				game->particle[i] = game->particle[game->n-1];
-				game->n--;
+		if (p->s.center.y < 0.0) {
+			//std::cout << "off screen" << std::endl;
+			game->particle[i] = game->particle[game->n-1];
+			game->n--;
 			}
 		}
 		
-	}
+	
 }
 
 void render(Game *game)
