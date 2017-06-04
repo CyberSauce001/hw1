@@ -1,3 +1,4 @@
+#Alexander Nguyen
 # cs335 lab1
 # to compile your project, type make and press enter
 
