@@ -45,7 +45,7 @@
 #define WINDOW_HEIGHT 600
 
 const int  MAX_PARTICLES = 100000;
-#define GRAVITY 0.1
+#define GRAVITY 0.7
 
 //X Windows variables
 Display *dpy;
@@ -100,7 +100,6 @@ int main(void)
 	init_opengl();
 	//declare game object
 	Game game;
-	game.n = 0;
 	//declare a box shape
 	for (int i = 0; i < 5; i++) {
 		game.box[i].width = 100;
@@ -227,15 +226,15 @@ void check_mouse(XEvent *e, Game *game)
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
-		if (++n < 10)
-			return;
+	if (++n < 10)
+		return;
 	int y = WINDOW_HEIGHT - e->xbutton.y;
 		
 	for (int i = 0; i < 10; i++) {
 		makeParticle(game, e->xbutton.x,y);
 	}
    	game->mouse[0] = savex;
-	game->mouse[1] =WINDOW_HEIGHT - savey;
+	game->mouse[1] = y;
 
 	}
 }
@@ -281,9 +280,9 @@ void movement(Game *game)
 		    		p->s.center.x > s->center.x - s->width &&
 		    		p->s.center.x < s->center.x + s->width ) {
 	            		p->s.center.y = s->center.y + s->height;
-	    			p->velocity.y = -p->velocity.y * 0.5; 
+	    			p->velocity.y = -p->velocity.y * 0.125; 
 				//p->velocity.y *= 0.5;
-				p->velocity.x += 0.2;
+				p->velocity.x += 0.025;
 			}
 		}
 			//check for off-screen
