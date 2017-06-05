@@ -103,7 +103,7 @@ int main(void)
 	//declare a box shape
 	for (int i = 0; i < 5; i++) {
 		game.box[i].width = 100;
-		game.box[i].height = 10;
+		game.box[i].height = 12;
 		game.box[i].center.x = 120 + i*65;//box
 		game.box[i].center.y = 500 - i*60;
 	}
@@ -125,6 +125,7 @@ int main(void)
 		glXSwapBuffers(dpy, win);
 	}
 	cleanupXWindows();
+	cleanup_fonts();
 	return 0;
 }
 
