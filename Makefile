@@ -1,11 +1,13 @@
 #Alexander Nguyen
 # cs335 lab1
 # to compile your project, type make and press enter
-
+CFLAGS = -I ./include
+##LIB = ./libggfonts.so
+LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 all: lab1
 
 lab1: lab1.cpp
-	g++ lab1.cpp -I /opt/X11/include -L /usr/X11/lib libggfonts.a  -Wall -olab1 -lX11 -lGL -lGLU -lm
+	g++ $(CFLAGS) lab1.cpp log.cpp libggfonts.a  -Wall -Wextra $(LFLAGS) -olab1 
 
 clean:
 	rm -f lab1
