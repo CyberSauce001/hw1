@@ -42,57 +42,17 @@
 #include <GL/glx.h>
 #include "log.h"
 #include "fonts.h"
-
+#include "hw1.h"
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-const int  MAX_PARTICLES = 100000;
 #define GRAVITY 0.1
 
 //X Windows variables
 Display *dpy;
 Window win;
 GLXContext glc;
-
-//Structures
-
-struct Vec {
-    float x, y, z;
-};
-
-struct Shape {
-    float width, height;
-    float radius;
-    Vec center;
-};
-
-struct Particle {
-    Shape s;
-    Vec velocity;
-};
-
-class Game {
-
-    public:
-	Shape box[5];
-	Particle particle[MAX_PARTICLES];
-	int n, bubbler;
-	int mouse[2];
-	Game() {
-	    n = 0, bubbler = 0;
-	}
-	Shape circle; // Water will fall on lower right circle
-};
-
-//Function prototypes
-void initXWindows(void);
-void init_opengl(void);
-void cleanupXWindows(void);
-void check_mouse(XEvent *e, Game *game);
-int check_keys(XEvent *e, Game *game);
-void movement(Game *game);
-void render(Game *game);
 
 
 int main(void)
@@ -191,6 +151,10 @@ void init_opengl(void)
 }
 
 #define rnd() (float)rand() / (float)RAND_MAX
+
+
+extern void setVelocity(Particle *p);
+
 void makeParticle(Game *game, int x, int y)
 {
     if (game->n >= MAX_PARTICLES)
@@ -200,8 +164,9 @@ void makeParticle(Game *game, int x, int y)
     Particle *p = &game->particle[game->n];
     p->s.center.x = x;
     p->s.center.y = y;
-    p->velocity.y = rnd() * 1.0 - 0.5;
-    p->velocity.x = rnd() * 1.0 - 0.5;
+    //p->velocity.y = rnd() * 1.0 - 0.5;
+    //p->velocity.x = rnd() * 1.0 - 0.5;
+    setVelocity(p);
     game->n++;
 }
 

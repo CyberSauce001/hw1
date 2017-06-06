@@ -6,8 +6,8 @@
 #LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 all: hw1
 
-hw1: hw1.cpp
-	g++ -I ./include hw1.cpp log.cpp libggfonts.a  -Wall -Wextra -lrt -lX11 -lGLU -lGL -pthread -lm -ohw1 
+hw1: hw1.cpp particles.cpp
+	g++ -I ./include hw1.cpp particles.cpp log.cpp libggfonts.a  -Wall -Wextra -lrt -lX11 -lGLU -lGL -pthread -lm -ohw1 
 
 clean:
 	rm -f hw1
