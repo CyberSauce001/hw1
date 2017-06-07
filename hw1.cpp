@@ -276,8 +276,10 @@ void movement(Game *game)
 	dist = sqrt((d0*d0) + (d1*d1));
 
 	if (dist <= game->circle.radius) {
-	    p->s.center.x = game->circle.center.x + (d0/dist)*game->circle.radius*1.01;
-	    p->s.center.y = game->circle.center.y + (d1/dist)*game->circle.radius*1.01;
+	    p->s.center.x = game->circle.center.x + 
+		(d0/dist)*game->circle.radius*1.01;
+	    p->s.center.y = game->circle.center.y + 
+		(d1/dist)*game->circle.radius*1.01;
 
 	    p->velocity.x += (d0/dist)*2.25;
 	    p->velocity.y += (d1/dist)*2.25;
@@ -312,7 +314,8 @@ void render(Game *game)
     glBegin(GL_LINE_LOOP);
     glColor3ub(90,140,70);
     for (int i = 0; i < n; i++) {
-	glVertex2i(game->circle.center.x + vert[i].x, game->circle.center.y + vert[i].y);
+	glVertex2i(game->circle.center.x + vert[i].x, 
+		game->circle.center.y + vert[i].y);
     }
     glEnd();
     //draw box
