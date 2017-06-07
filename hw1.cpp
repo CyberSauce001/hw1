@@ -47,7 +47,7 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-#define GRAVITY 0.25
+#define GRAVITY 0.5
 
 //X Windows variables
 Display *dpy;
@@ -257,9 +257,9 @@ void movement(Game *game)
 		    p->s.center.x > s->center.x - s->width &&
 		    p->s.center.x < s->center.x + s->width ) {
 		p->s.center.y = s->center.y + s->height;
-		p->velocity.y = -p->velocity.y * 0.5; 
-		//p->velocity.y *= 0.5;
-		p->velocity.x += ((rnd()*2.5)*0.4);
+		p->velocity.y = -p->velocity.y;// * 0.125; 
+		p->velocity.y *= ((rnd()*1.0)*0.125);
+		p->velocity.x += ((rnd()*1.0)*0.125);
 	    }
 	}
 	//check for off-screen
