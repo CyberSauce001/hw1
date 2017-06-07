@@ -47,7 +47,7 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-#define GRAVITY 0.5
+#define GRAVITY 1.2
 
 //X Windows variables
 Display *dpy;
